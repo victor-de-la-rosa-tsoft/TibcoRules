@@ -21,13 +21,14 @@ public class ExampleTibcoRule extends AbstractRule {
 
 		/** archivo analizado */
 		File file = ctx.getSourceCodeFilename();
+		String relativeFilepath = file.getPath().substring(ctx.getCurrentDirectory().getPath().length());
 
 		/** incluye violación */
 		ctx.getReport().addRuleViolation(
-				createRuleViolation(ctx, 1, "Ejemplo violacion archivo " + file.getPath()));
+				createRuleViolation(ctx, 1, "Ejemplo violacion archivo " + relativeFilepath));
 
 		ctx.getReport().addRuleViolation(
-				createRuleViolation(ctx, 5, "Ejemplo violacion2 archivo " + file.getPath()));
+				createRuleViolation(ctx, 5, "Ejemplo violacion2 archivo " + relativeFilepath));
 	}
 
 	/**

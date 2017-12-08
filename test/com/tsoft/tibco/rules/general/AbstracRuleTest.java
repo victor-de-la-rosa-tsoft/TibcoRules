@@ -23,13 +23,40 @@ public class AbstracRuleTest {
 
 	}
 
-	public static RuleContext test(Rule rule, String code, String testname) {
+	/**
+	 * Metodo que prepara un contexto e invoca una ejecución de una regla sobre un código. 
+	 * El contexto se informa con las violaciones encontradas por la regla
+	 * y una ruta relativa del archivo al que corresponde el còdigo analizado. 
+	 * 
+	 * @param rule
+	 * @param code
+	 * @param relativaPathFilename
+	 * @return
+	 */
+	public static RuleContext test(Rule rule, String code, String relativaPathFilename) {
+		return testWithSrcFolder(rule, code, relativaPathFilename, "");
+	}
+	
+	/**
+	 * Metodo que prepara un contexto e invoca una ejecución de una regla sobre un código. 
+	 * El contexto se informa con las violaciones encontradas por la regla, además de 
+	 * la ruta a una carpeta raiz simulada sobre la que se está ejecutando el análisis, 
+	 * y una ruta relativa del archivo al que corresponde el còdigo analizado. 
+	 * 
+	 * @param rule - regla validada
+	 * @param code - contenido del archivo en analisis
+	 * @param relativaPathFilename - path relativo del fuente en analisis
+	 * @param sourcePath - simula una carpeta raiz donde se encuentran los fuentes
+	 * @return
+	 */
+	public static RuleContext testWithSrcFolder(Rule rule, String code, String relativaPathFilename, String srcFolder) {
 
 		RuleContext ctx = new RuleContext();
 		
+		File srcFolderFile = new File(srcFolder);
+		File codeFile = new File(srcFolderFile, relativaPathFilename);
 		
-		File codeFile = new File(testname);
-		
+		ctx.setCurrentDirectory(srcFolderFile);
 		ctx.setSourceCodeFilename(codeFile);
 		
 		ctx.setOriginalFileContents(TransformedContents.build(ctx.getSourceCodeFilename(), code));

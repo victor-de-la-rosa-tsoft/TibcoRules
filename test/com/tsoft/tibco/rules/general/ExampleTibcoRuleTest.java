@@ -17,12 +17,13 @@ public class ExampleTibcoRuleTest extends AbstracRuleTest {
 		rule.setMessage("Uso de variables de entorno.");
 		
 		String testfilename = "/resources/exampletibcoruletest1.process";
+		String srcFolder = "c:/srcFolder"; 
 		String BAD_CODE = readTestFile(testfilename);
 
-		RuleContext rc = ExampleTibcoRuleTest.test(rule, BAD_CODE, testfilename);
+		RuleContext rc = ExampleTibcoRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
 		//lineas con violaciones
-		check(rc, " test 1 ", 1,2);
+		check(rc, " test 1 ", 1, 5);
 	}
 
 	

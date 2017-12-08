@@ -14,7 +14,7 @@ public class ExampleTibcoRule extends AbstractRule {
 	 * @param basenode
 	 *            - valor nulo (por ahora no hay parser)
 	 * @param ctx
-	 *            - contexto regla
+	 *            - contexto e ejecución de la regla
 	 */
 	@Override
 	public void visit(BaseNode basenode, final RuleContext ctx) {
@@ -24,8 +24,10 @@ public class ExampleTibcoRule extends AbstractRule {
 
 		/** incluye violación */
 		ctx.getReport().addRuleViolation(
-				createRuleViolation(ctx, 1, "Ejemplo violacion"));
+				createRuleViolation(ctx, 1, "Ejemplo violacion archivo " + file.getPath()));
 
+		ctx.getReport().addRuleViolation(
+				createRuleViolation(ctx, 5, "Ejemplo violacion2 archivo " + file.getPath()));
 	}
 
 	/**

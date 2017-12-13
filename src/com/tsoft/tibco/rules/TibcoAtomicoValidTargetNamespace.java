@@ -11,7 +11,7 @@ import com.als.core.ast.NodeVisitor;
 import com.als.core.ast.NullNode;
 import com.als.core.ast.TreeNode;
 
-public class validatePath extends AbstractRule{
+public class TibcoAtomicoValidTargetNamespace extends AbstractRule {
 	
 	String patternProcess = null;
 	
@@ -19,7 +19,7 @@ public class validatePath extends AbstractRule{
 		
 		//solo si es un process, seteo el patron 
 		File file = ctx.getSourceCodeFilename();
-		if( file.getName().contains(".process") && file.getAbsolutePath().contains("/Process/") ){
+		if( file.getName().contains(".process") ){
 			patternProcess = "http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,10}\\/Process\\/[\\w]+";
 		}
 		

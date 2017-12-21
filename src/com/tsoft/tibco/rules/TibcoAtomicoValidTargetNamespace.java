@@ -1,49 +1,179 @@
-package com.tsoft.tibco.rules.general;
+package com.tsoft.tibco.rules;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
-import org.junit.Test;
-
+import com.als.core.AbstractRule;
 import com.als.core.RuleContext;
-import com.tsoft.tibco.rules.TibcoAtomicoValidTargetNamespace;
+import com.als.core.RuleViolation;
+import com.als.core.ast.BaseNode;
+import com.als.core.ast.NodeVisitor;
+import com.als.core.ast.NullNode;
+import com.als.core.ast.TreeNode;
+import com.optimyth.qaking.xml.XmlNode;
 
-public class TibcoValidNamespaceRuleTest extends AbstracRuleTest {
-
-
-	@Test
-	public void testBadCode() {
-		TibcoAtomicoValidTargetNamespace rule = new TibcoAtomicoValidTargetNamespace();
-		rule.setMessage("Valid Namespace.");
+public class TibcoAtomicoValidTargetNamespace extends AbstractRule {
+	
+	static List<String> patternProcess = null;
+	static List<String> nodeToSearch = new ArrayList<>();
+	static String subRule = null;
+	
+public void initialize(RuleContext ctx) {
+		//aca validar estructura de directorios solamente
 		
-		String testfilename = "/resource/WebServices/wsCL1MDCLVSP001-CONSolicitaDesafio.wsdl";
-		//String testfilename = "/resources/Process/tibcoAtomicoValidTargetNamespace1.process";
-		String srcFolder = "c:/srcFolder"; 
-		String BAD_CODE = readTestFile(testfilename);
-
-		RuleContext rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
-		//lineas con violaciones
-		check(rc, " test 1 ");
-		//check(rc, " test 1 ",3);
+		/*if( file.getName().contains(".process") && file.getAbsolutePath().contains("/Process/") ){
+			patternProcess = "http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,10}\\/Process\\/[\\w]+";
+		}*/
+		
 	}
 
+
+private static String getExtension( String str ){
+	
+	str = reverse(str);
+	str = str.substring(0, str.indexOf('.'));
+	str = reverse(str);
+	return String.valueOf(str);
+}
+
+
+private static String reverse( String str ){
+	
+	if( str == null )
+		return str;
+	
+	char[] array = str.toCharArray();
+
+    for (int i = 0, j = array.length-1 ; i < j ; i++, j--){
+        // Swap values of left and right
+        char temp = array[i];
+        array[i] = array[j];
+        array[j]=temp;
+    }
+	
+	return String.valueOf(array);
+}
+	
+	@Override
+	public void visit(BaseNode basenode, final RuleContext ctx) {
+
+		System.out.println("basenode "+basenode);
+		setPatternToSearch( ctx );
+		if( basenode instanceof NullNode || patternProcess == null)
+		      return;
+		else
+			System.out.println("pattern seteado a "+patternProcess.toString());
+		
+		//itera en el documento actual
+	      TreeNode.on(basenode).accept( new NodeVisitor() {       
+	          public void visit(BaseNode node) {
+	        	  
+	              //busca un nodo explicito
+	        	  String type = node.getTypeName();
+	              if ( !nodeToSearch.contains(type) )
+	            	  return;
+	              
+	              if( subRule.equals("wsdl") ){
+	            	  validWsdl( node, ctx);
+	              }else if( subRule.equals("process") ){
+	            	  validProcess(node, ctx);
+	              }
+	            	   
+	            }
+	          });
+	      
+	}
 	
 	
-	private static String readTestFile(String path) {
-		StringBuffer content = new StringBuffer();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(
-					TibcoValidNamespaceRuleTest.class.getResource(path).getFile()));
-			String line;
-			while ((line = br.readLine()) != null) {
-				content.append(line).append(System.getProperty("line.separator"));
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	protected void validProcess(BaseNode node, RuleContext ctx) {
+		
+		String value = node.getChild(0).getImage();
+        
+        if( !validate( value, patternProcess.get(0)) ){
+      	  RuleViolation violation = createRuleViolation(ctx, node.getBeginLine(),"Violacion en el nodo "+node.getTypeName());
+            ctx.getReport().addRuleViolation(violation);
+        }
+		
+	}
+
+
+	@SuppressWarnings("unchecked")
+	protected void validWsdl(BaseNode node, RuleContext ctx) {
+		
+		XmlNode xmlNode = (XmlNode) node;
+		Map<String, String> attributes = xmlNode.getAttributesMap();
+        Iterator<String> it = attributes.keySet().iterator();
+        while(it.hasNext()){
+          String name = (String)it.next();
+          if( "targetNamespace".equals(name) ){
+        	  String patt = node.getTypeName() == "wsdl:definitions" ? patternProcess.get(0): patternProcess.get(1);
+        	  if( !validate( (String)attributes.get(name), patt ) ){
+            	  RuleViolation violation = createRuleViolation(ctx, node.getBeginLine(),"Violacion en el nodo "+node.getTypeName()+" atributo targetNamespace : "+(String)attributes.get(name));
+                  ctx.getReport().addRuleViolation(violation);
+              } 
+          }
+        }
+        
+	}
+
+
+	private static void setPatternToSearch( final RuleContext ctx ){
+		
+		File file = ctx.getSourceCodeFilename();
+		subRule = getExtension( file.getName() );
+		System.out.println("initialize validatePath "+file.getName()+" extension "+subRule);
+		
+		//solo si es un process, seteo el patron 
+		
+		switch( subRule ) {
+		case "process":
+			//System.out.println("seteando el patternprocess");
+			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,10}\\/Process\\/[\\w]+");
+			nodeToSearch = Arrays.asList("pd:targetNamespace");
+			break;
+		case "wsdl":
+			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,15}\\/(WSDL\\/)?[\\w]+","http:\\/\\/itg\\.isban.cl\\/[\\w]{5,20}\\/Resources\\/Schemas\\/[\\w]+\\.xsd");
+			nodeToSearch = Arrays.asList("wsdl:definitions","xs:schema");
+			break;
+		case "xsd":
+			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,10}\\/Process\\/[\\w]+\\.xsd");
+			nodeToSearch = Arrays.asList("pd:targetNamespace");
+			break;
+		default:
+			System.out.println("Extension no valida");
+			patternProcess = null;
+			break;
 		}
-		return content.toString();
+		
+		
 	}
 
+	/**
+	 * Post process
+	 */
+	@Override
+	public void postProcess(RuleContext ctx) {
+
+		super.postProcess(ctx);
+	}
 	
+	
+	  private boolean validate( String value, String patt){
+		  
+		  boolean result = false;
+		  final Pattern pattern = Pattern.compile(patt);
+		  if( pattern.matcher(value).find() )
+			  result = true;
+		  System.out.println("a validar "+value+ " result "+result);
+		  return result;
+	  }
+	
+	
+
 }

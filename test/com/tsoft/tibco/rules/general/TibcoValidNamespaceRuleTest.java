@@ -12,18 +12,27 @@ public class TibcoValidNamespaceRuleTest extends AbstracRuleTest {
 
 
 	@Test
-	public void testBadCode() {
+	public void testBadCode(){
 		TibcoAtomicoValidTargetNamespace rule = new TibcoAtomicoValidTargetNamespace();
 		rule.setMessage("Valid Namespace.");
 		
-		String testfilename = "/resources/Process/tibcoAtomicoValidTargetNamespace1.process";
+		String testfilename = "/resource/WebServices/wsCL1MDCLVSP001-CONSolicitaDesafio.wsdl";
+		//String testfilename = "/resources/Process/tibcoAtomicoValidTargetNamespace1.process";
 		String srcFolder = "c:/srcFolder"; 
 		String BAD_CODE = readTestFile(testfilename);
 
 		RuleContext rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
 		//lineas con violaciones
-		check(rc, " test 1 ", 44);
+		check(rc, " test 1 ");
+		//check(rc, " test 1 ",3);
+		
+		testfilename = "/resources/xsd/INFO.xsd";
+		BAD_CODE = readTestFile(testfilename);
+		rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		check(rc, " test 1 ", 7);
+		
+		
 	}
 
 	

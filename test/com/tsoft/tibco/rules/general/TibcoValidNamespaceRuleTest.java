@@ -16,21 +16,26 @@ public class TibcoValidNamespaceRuleTest extends AbstracRuleTest {
 		TibcoAtomicoValidTargetNamespace rule = new TibcoAtomicoValidTargetNamespace();
 		rule.setMessage("Valid Namespace.");
 		
-		String testfilename = "/resource/WebServices/wsCL1MDCLVSP001-CONSolicitaDesafio.wsdl";
-		//String testfilename = "/resources/Process/tibcoAtomicoValidTargetNamespace1.process";
+		//valida webservices
+		String testfilename = "/resources/WebServices/wsCL1MDCLVSP001-CONSolicitaDesafio.wsdl";
 		String srcFolder = "c:/srcFolder"; 
 		String BAD_CODE = readTestFile(testfilename);
 
 		RuleContext rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
 		//lineas con violaciones
-		check(rc, " test 1 ");
+		check(rc, " test webservices ");
 		//check(rc, " test 1 ",3);
-		
-		testfilename = "/resources/xsd/INFO.xsd";
+		//valida xsd
+		testfilename = "/resources/Xsd/INFO.xsd";
 		BAD_CODE = readTestFile(testfilename);
 		rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
-		check(rc, " test 1 ", 7);
+		check(rc, " test xsd ", 7);
+		//valida process
+		testfilename = "/resources/Process/tibcoAtomicoValidTargetNamespace1.process";
+		BAD_CODE = readTestFile(testfilename);
+		rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		check(rc, " test process ", 44);
 		
 		
 	}

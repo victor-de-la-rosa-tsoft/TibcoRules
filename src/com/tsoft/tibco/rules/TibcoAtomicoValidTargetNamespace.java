@@ -79,7 +79,7 @@ private static String reverse( String str ){
 	              if ( !nodeToSearch.contains(type) )
 	            	  return;
 	              
-	              if( subRule.equals("wsdl") ){
+	              if( subRule.equals("wsdl") || subRule.equals("xsd") ){
 	            	  validWsdl( node, ctx);
 	              }else if( subRule.equals("process") ){
 	            	  validProcess(node, ctx);
@@ -90,6 +90,12 @@ private static String reverse( String str ){
 	      
 	}
 	
+	
+	protected void validXsd(BaseNode node, RuleContext ctx){
+		
+		
+		
+	}
 	
 	protected void validProcess(BaseNode node, RuleContext ctx) {
 		
@@ -112,7 +118,7 @@ private static String reverse( String str ){
         while(it.hasNext()){
           String name = (String)it.next();
           if( "targetNamespace".equals(name) ){
-        	  String patt = node.getTypeName() == "wsdl:definitions" ? patternProcess.get(0): patternProcess.get(1);
+        	  String patt = node.getTypeName() == "xs:schema" ? patternProcess.get(0): patternProcess.get(1);
         	  if( !validate( (String)attributes.get(name), patt ) ){
             	  RuleViolation violation = createRuleViolation(ctx, node.getBeginLine(),"Violacion en el nodo "+node.getTypeName()+" atributo targetNamespace : "+(String)attributes.get(name));
                   ctx.getReport().addRuleViolation(violation);
@@ -126,7 +132,7 @@ private static String reverse( String str ){
 	private static void setPatternToSearch( final RuleContext ctx ){
 		
 		File file = ctx.getSourceCodeFilename();
-		subRule = getExtension( file.getName() );
+		subRule = getExtension( file.getName() );//extension
 		System.out.println("initialize validatePath "+file.getName()+" extension "+subRule);
 		
 		//solo si es un process, seteo el patron 
@@ -138,12 +144,12 @@ private static String reverse( String str ){
 			nodeToSearch = Arrays.asList("pd:targetNamespace");
 			break;
 		case "wsdl":
-			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,15}\\/(WSDL\\/)?[\\w]+","http:\\/\\/itg\\.isban.cl\\/[\\w]{5,20}\\/Resources\\/Schemas\\/[\\w]+\\.xsd");
+			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban.cl\\/[\\w]{5,20}\\/Resources\\/Schemas\\/[\\w]+\\.xsd","http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,15}\\/(WSDL\\/)?[\\w]+");
 			nodeToSearch = Arrays.asList("wsdl:definitions","xs:schema");
 			break;
 		case "xsd":
-			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,10}\\/Process\\/[\\w]+\\.xsd");
-			nodeToSearch = Arrays.asList("pd:targetNamespace");
+			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban.cl\\/[\\w]{5,20}\\/Resources\\/Schemas\\/[\\w]+\\.xsd");
+			nodeToSearch = Arrays.asList("xs:schema");
 			break;
 		default:
 			System.out.println("Extension no valida");

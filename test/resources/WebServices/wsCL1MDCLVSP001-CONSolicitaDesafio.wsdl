@@ -1,1 +1,82 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns1="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://itg.isban.cl/CL/ACL/1MDCLVSP001/SolicitaDesafio" xmlns:ns0="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP001.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="Untitled" targetNamespace="http://itg.isban.cl/CL/ACL/1MDCLVSP001/SolicitaDesafio">
+    <wsdl:types>
+        <xs:schema xmlns="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:element name="Info">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Codigo" type="xs:string"/>
+                        <xs:element name="Descripcion" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP001.xsd" xmlns:ns0="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP001.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:import namespace="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd"/>
+            <xs:element name="INPUT">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="USUARIO-ALT" type="xs:string"/>
+                        <xs:element name="TERMINAL-ALT" type="xs:string"/>
+                        <xs:element name="CANAL-ID" type="xs:string"/>
+                        <xs:element name="RutCliente" type="xs:string"/>
+                        <xs:element name="Segmento" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="TIB_CLVSP001_CONSolicitaDesafio_Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element ref="ns0:Info"/>
+                        <xs:element name="OUTPUT" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Escalares" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="NumeroTarjeta" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="TipoAutenticacion" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="GlosaTipoAutentica" type="xs:string" minOccurs="0"/>
+                                                <xs:element name="MatrizDesafio" type="xs:string" minOccurs="0"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:service name="wsCL1MDCLVSP001-CONSolicitaDesafio">
+        <wsdl:port name="wsCL1MDCLVSP001_CONSolicitaDesafio" binding="tns:wsCL1MDCLVSP001_CONSolicitaDesafioBinding">
+            <soap:address location="http://localhost:8002/Services/wsCL1MDCLVSP001_CONSolicitaDesafio"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="PortType">
+        <wsdl:operation name="getSolicitaDesafio">
+            <wsdl:input message="tns:INPUT"/>
+            <wsdl:output message="tns:OUTPUT"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="wsCL1MDCLVSP001_CONSolicitaDesafioBinding" type="tns:PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getSolicitaDesafio">
+            <soap:operation style="document" soapAction="/Services/wsCL1MDCLVSP001_CONSolicitaDesafio/getSolicitaDesafio"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:message name="INPUT">
+        <wsdl:part name="parameters" element="ns0:INPUT"/>
+    </wsdl:message>
+    <wsdl:message name="OUTPUT">
+        <wsdl:part name="parameters" element="ns0:TIB_CLVSP001_CONSolicitaDesafio_Response"/>
+    </wsdl:message>
+</wsdl:definitions>

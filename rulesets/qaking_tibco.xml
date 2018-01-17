@@ -3,42 +3,41 @@
 <ruleset name="qaking_rtocuentas" updated="2014-12-29">
   <description>Reglas Tibco</description>
   
-  <rule name="TSOFT_TIBCO.ValidNamespace" message="TSOFT_TIBCO.ValidNamespace: Regla de prueba" 
-         class="com.optimyth.qaking.ula.rule.TextMatcherRule" technology="TIBCO" active="true">
-    <description><![CDATA[ Regla de prueba. Emite una violacion por archivo ]]></description>
+  <rule name="TSOFT_TIBCO.ValidProjectStructure" message="TSOFT_TIBCO.ValidProjectStructure: Valida estructura de un proyecto tibco."
+         class="com.tsoft.tibco.rules.TibcoAppProjectValidStructureRule" technology="TIBCO" active="true">
+    <description><![CDATA[ Las estructura de un proyecto Tibco debe cumplir con la recomendacion descrita
+    en el Manual de Procedimiento de Desarrollo TIBCO.
+     <pre>
+     /AESchemas
+     /EAR
+     /Process
+         /MAIN
+             /STARTPROCESS
+         /SUBPROCESS
+             /ATOMICOS
+             /UTILITIES
+         /RESTJASON
+     /Resources
+         /CONNECTIONS
+             /HTTP
+             /HTTPS
+             /JMS
+             /MSSQL
+             /ORACLE
+         /LIBRARY
+         /POLICIES
+         /SCHEMAS
+     /Services
+     </pre>
+]]></description>
     <priority>1</priority>
     <impl>1</impl>
-    <benefits><![CDATA[de prueba.]]></benefits>
+    <benefits><![CDATA[Normalización de proyectos]]></benefits>
     <inconvenients><![CDATA[]]></inconvenients>
     <example><![CDATA[]]></example>
     <repair><![CDATA[]]></repair>
-    <reference><![CDATA[Tibco]]></reference>
+    <reference><![CDATA[Manual de Procedimiento de Desarrollo TIBCO V 1.3. Banco Santander Chile.]]></reference>
     <properties>      
-      <property name="TextMatcherScript" descname="ULA code"><value><![CDATA[
-      BEGIN <@          
-          
-        /** lee archivo configuracion cuentas usuario */ 
-        def loadRtoAccounts() {
-          
-          def cuentasFileName = 'Isban/qaking_rtocuentas_rule.txt' 
-          
-          def rtoAccountsList = []
-          new File(com.als.checking.model.CheckingConstants.METAFILES,cuentasFileName).text.split(/\r?\n/).each {
-            rtoAccountsList.add(it)
-          }
-          println('leidos ' + rtoAccountsList.size() + ' cuentas usuarios de ' + cuentasFileName)
-          return rtoAccountsList          
-        }
-      @>
-      /([a-zA-Z0-9_]{4,8})/ <@
-	      if(RULECTX.getGlobalProperty('rtoaccounts').contains(FIELD[0])) {         
-	        ruleViol = new com.als.core.RuleViolation(RULE, NR, "Potencial uso de cuenta de sistema en codigo.", RULECTX)
-	        code = "Cuenta de sistema '" + MATCH.field[0].replaceAll("[^\\x20-\\x7E]","?") + "' aparece en: " + RULECTX.getTransformedFileContents().getLine(NR).replaceAll("[^\\x20-\\x7E]","?")
-	        ruleViol.setCodeViolated(code.length() > 200? code.substring(0,200) : code);
-	        RULECTX.getReport().addRuleViolation(ruleViol);
-	      }
-      @>  ]]></value>
-      </property>
     </properties>
     <idcat>Mantenibilidad</idcat>
   </rule>

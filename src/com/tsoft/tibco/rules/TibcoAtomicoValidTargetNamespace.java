@@ -20,7 +20,7 @@ import com.optimyth.qaking.xml.XmlNode;
 public class TibcoAtomicoValidTargetNamespace extends AbstractRule {
 	
 	static List<String> patternProcess = null;
-	static List<String> nodeToSearch = new ArrayList<>();
+	static List<String> nodeToSearch = new ArrayList<String>();
 	static String subRule = null;
 	
 public void initialize(RuleContext ctx) {
@@ -137,17 +137,17 @@ private static String reverse( String str ){
 		
 		//solo si es un process, seteo el patron 
 		
-		switch( subRule ) {
-		case "process":
+		switch( 0 ) {
+		case 1:
 			//System.out.println("seteando el patternprocess");
 			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,10}\\/Process\\/[\\w]+");
 			nodeToSearch = Arrays.asList("pd:targetNamespace");
 			break;
-		case "wsdl":
+		case 2:
 			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban.cl\\/[\\w]{5,20}\\/Resources\\/Schemas\\/[\\w]+\\.xsd","http:\\/\\/itg\\.isban\\.cl\\/[\\w]{2,3}\\/[\\w]{2,3}\\/[\\w]{5,15}\\/(WSDL\\/)?[\\w]+");
 			nodeToSearch = Arrays.asList("wsdl:definitions","xs:schema");
 			break;
-		case "xsd":
+		case 3:
 			patternProcess = Arrays.asList("http:\\/\\/itg\\.isban.cl\\/[\\w]{5,20}\\/Resources\\/Schemas\\/[\\w]+\\.xsd");
 			nodeToSearch = Arrays.asList("xs:schema");
 			break;

@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/qaKingCore.jar"/>
 	<classpathentry kind="lib" path="lib/alsUtils.jar"/>
 	<classpathentry kind="lib" path="lib/spring.jar"/>
@@ -14,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/qaking_xml_parser.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_144"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

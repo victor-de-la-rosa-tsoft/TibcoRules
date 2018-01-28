@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+  <bean id="ls_tibco_parser" class="com.tsoft.tibco.parser.TibcoCompositeParser">
+    <constructor-arg>
+        <list>
+            <bean class="com.tsoft.tibco.parser.SubstvarParser" />
+        </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="ls_tibco_matcher" class="com.als.core.language.DirectoryFileMatcher">    
+    <constructor-arg type="java.util.Set"><set>
+      <value>process</value>
+      <value>serviceagent</value>
+      <value>aeschema</value>
+      <value>substvar</value>
+      <value>sharedhttp</value>
+      <value>sharedjdbc</value>
+      <value>sharedjms</value>
+    </set></constructor-arg>
+  </bean>
+  
+  <bean id="ls_tibco" class="com.als.core.language.LanguageSupport">
+    <property name="parser" ref="ls_tibco_parser"/>
+    <property name="fileMatcher" ref="ls_tibco_matcher"/>
+    <property name="technology" value="tibco"/>
+  </bean>
+
+</beans>

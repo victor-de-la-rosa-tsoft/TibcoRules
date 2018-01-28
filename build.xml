@@ -12,7 +12,9 @@
 
 	<property name="dist" value="dist" />
 	<property name="bin" value="bin" />
-	<property name="jarname" value="qaking_tibco_rules" />
+	<property name="parser_files" value="parser_files" />
+	<property name="parserjarname" value="qaking_tibco_parser" />
+	<property name="rulesjarname" value="qaking_tibco_rules" />
 
 
 	<target name="build">
@@ -21,8 +23,18 @@
 		<mkdir dir="${dist}" />
 
 
-		<jar destfile="${dist}/${jarname}.jar">
-			<fileset dir="${bin}" includes="com/**/*.class" excludes="**/*Test*.class" />
+		<jar destfile="${dist}/${parserjarname}.jar">
+			<fileset dir="${bin}" includes="**/parser/**,**.parser.**" excludes="**/*Test*.class,**/rules/**" />
+			<fileset dir="${parser_files}" />
+
+			<manifest>
+				<attribute name="Built-By" value="victordelarosa" />
+				<attribute name="Build-Date" value="${build_date}" />
+			</manifest>
+		</jar>
+
+		<jar destfile="${dist}/${rulesjarname}.jar">
+			<fileset dir="${bin}" includes="com/**/*.class" excludes="**/*Test*.class,**/parser/**,resources/**" />
 
 			<manifest>
 				<attribute name="Built-By" value="victordelarosa" />

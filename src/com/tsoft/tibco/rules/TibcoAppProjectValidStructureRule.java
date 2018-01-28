@@ -13,6 +13,10 @@ import java.util.regex.Pattern;
 
 /**
  * Regla que revisa estructura de carpetas de un proyeco tibco BW 5.x
+ *
+ * Emplea un juego de expresiones regulares para validar carpetas y tipos de archivos admitidos.
+ *
+ * TODO Analizar rendimiento y Optimizar expresiones regulares
  */
 public class TibcoAppProjectValidStructureRule extends AbstractRule {
 
@@ -75,8 +79,6 @@ public class TibcoAppProjectValidStructureRule extends AbstractRule {
 
             }
         }
-
-
 
         if (!pathIsValid) {
             ctx.getReport().addRuleViolation(

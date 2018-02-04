@@ -2,7 +2,7 @@
 <repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
 	<globalVariables>
 		<globalVariable>
-			<name>Deployment</name>
+			<name>nocamel_case</name>
 			<value>App3Click</value>
 			<deploymentSettable>true</deploymentSettable>
 			<serviceSettable>false</serviceSettable>
@@ -10,7 +10,7 @@
 			<modTime>1489061891034</modTime>
 		</globalVariable>
 		<globalVariable>
-			<name>DirLedger</name>
+			<name>DirLedger2</name>
 			<value>.</value>
 			<deploymentSettable>true</deploymentSettable>
 			<serviceSettable>false</serviceSettable>
@@ -18,7 +18,7 @@
 			<modTime>1489061891064</modTime>
 		</globalVariable>
 		<globalVariable>
-			<name>DirTrace</name>
+			<name>dirTrace</name>
 			<value>.</value>
 			<deploymentSettable>true</deploymentSettable>
 			<serviceSettable>false</serviceSettable>
@@ -26,7 +26,7 @@
 			<modTime>1489061890968</modTime>
 		</globalVariable>
 		<globalVariable>
-			<name>Domain</name>
+			<name>domain</name>
 			<value>domain</value>
 			<deploymentSettable>true</deploymentSettable>
 			<serviceSettable>false</serviceSettable>

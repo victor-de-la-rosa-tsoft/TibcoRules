@@ -3,6 +3,7 @@ package com.tsoft.tibco.rules.general;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import com.tsoft.tibco.rules.AbstracRuleTest;
 import org.junit.Test;
 
 import com.als.core.RuleContext;
@@ -20,7 +21,7 @@ public class ExampleTibcoRuleTest extends AbstracRuleTest {
 		String srcFolder = "c:/srcFolder"; 
 		String BAD_CODE = readTestFile(testfilename);
 
-		RuleContext rc = ExampleTibcoRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		RuleContext rc = testWithXmlParserFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
 		//lineas con violaciones
 		check(rc, " test 1 ", 1, 5);

@@ -3,6 +3,7 @@ package com.tsoft.tibco.rules.general;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import com.tsoft.tibco.rules.AbstracRuleTest;
 import org.junit.Test;
 
 import com.als.core.RuleContext;
@@ -21,7 +22,7 @@ public class TibcoValidNamespaceRuleTest extends AbstracRuleTest {
 		String srcFolder = "c:/srcFolder"; 
 		String BAD_CODE = readTestFile(testfilename);
 
-		RuleContext rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		RuleContext rc = testWithXmlParserFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
 		//lineas con violaciones
 		check(rc, " test webservices ");
@@ -29,12 +30,12 @@ public class TibcoValidNamespaceRuleTest extends AbstracRuleTest {
 		//valida xsd
 		testfilename = "/resources/Xsd/INFO.xsd";
 		BAD_CODE = readTestFile(testfilename);
-		rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		rc = testWithXmlParserFolder(rule, BAD_CODE, testfilename, srcFolder);
 		check(rc, " test xsd ", 7);
 		//valida process
 		testfilename = "/resources/Process/tibcoAtomicoValidTargetNamespace1.process";
 		BAD_CODE = readTestFile(testfilename);
-		rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		rc = testWithXmlParserFolder(rule, BAD_CODE, testfilename, srcFolder);
 		check(rc, " test process ", 44);
 		
 		

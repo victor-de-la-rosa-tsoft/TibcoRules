@@ -3,7 +3,7 @@
 <ruleset name="qaking_rtocuentas" updated="2014-12-29">
   <description>Reglas Tibco</description>
   
-  <rule name="TSOFT_TIBCO.ValidProjectStructure" message="TSOFT_TIBCO.ValidProjectStructure: Valida estructura de un proyecto tibco."
+  <rule name="TSOFT_TIBCO.ValidProjectStructure" message="LA estructura del proyecto tibco debe cumplir con estándar de buenas prácticas."
          class="com.tsoft.tibco.rules.TibcoAppProjectValidStructureRule" technology="TIBCO" active="true">
     <description><![CDATA[ Las estructura de un proyecto Tibco debe cumplir con la recomendacion descrita
     en el Manual de Procedimiento de Desarrollo TIBCO.
@@ -11,23 +11,27 @@
      /AESchemas
      /EAR
      /Process
-         /MAIN
-             /STARTPROCESS
-         /SUBPROCESS
-             /ATOMICOS
-             /UTILITIES
-         /RESTJASON
+         /Main
+             /StartProcess
+         /SubProcess
+             /Atomicos
+             /Utilities
+             /...
+         /RestJson
      /Resources
-         /CONNECTIONS
+         /Connections
              /HTTP
              /HTTPS
              /JMS
              /MSSQL
              /ORACLE
-         /LIBRARY
-         /POLICIES
-         /SCHEMAS
-     /Services
+         /Library
+         /Policies
+         /Schemas
+         /Parse
+         /Xml
+         /Xslt
+     /Services (solo archivos .wsdl)
      </pre>
 ]]></description>
     <priority>1</priority>
@@ -38,6 +42,26 @@
     <repair><![CDATA[]]></repair>
     <reference><![CDATA[Manual de Procedimiento de Desarrollo TIBCO V 1.3. Banco Santander Chile.]]></reference>
     <properties>      
+    </properties>
+    <idcat>Mantenibilidad</idcat>
+  </rule>
+  <rule name="TSOFT_TIBCO.ValidGlobalVariables" message="Variables globales deben cumplir con nomenclatura."
+        class="com.tsoft.tibco.rules.TibcoGlobalVariablesRule" technology="TIBCO" active="true">
+    <description><![CDATA[ La nomenclatura de variables globales debe seguir la siguiente notación:
+     <pre>
+        Los contenedores de variables deben ser escritos en MAYUSCULA
+        Todas la variables debe ser escritas bajo nomenclatura CamelCase.
+        Todas la variables utilizados para almacenar claves deben ser de tipo Password.
+     </pre>
+]]></description>
+    <priority>1</priority>
+    <impl>1</impl>
+    <benefits><![CDATA[Normalización de proyectos]]></benefits>
+    <inconvenients><![CDATA[]]></inconvenients>
+    <example><![CDATA[]]></example>
+    <repair><![CDATA[]]></repair>
+    <reference><![CDATA[Manual de Procedimiento de Desarrollo TIBCO V 1.3. Banco Santander Chile.]]></reference>
+    <properties>
     </properties>
     <idcat>Mantenibilidad</idcat>
   </rule>

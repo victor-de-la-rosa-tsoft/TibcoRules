@@ -1,6 +1,6 @@
 package com.tsoft.tibco.rules;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.StringReader;
@@ -39,7 +39,8 @@ public class AbstracRuleTest {
 	 */
 	public static RuleContext test(Rule rule, String code,
 			String relativaPathFilename) {
-		return testWithSrcFolder(rule, code, relativaPathFilename, "");
+		return testWithXmlParserFolder(rule, code, relativaPathFilename, "");
+
 	}
 
 	/**
@@ -55,11 +56,11 @@ public class AbstracRuleTest {
 	 *            - contenido del archivo en analisis
 	 * @param relativaPathFilename
 	 *            - path relativo del fuente en analisis
-	 * @param sourcePath
+	 * @param srcFolder
 	 *            - simula una carpeta raiz donde se encuentran los fuentes
 	 * @return
 	 */
-	public static RuleContext testWithSrcFolder(Rule rule, String code,
+	public static RuleContext testWithXmlParserFolder(Rule rule, String code,
 			String relativaPathFilename, String srcFolder) {
 
 		RuleContext ctx = new RuleContext();
@@ -93,13 +94,43 @@ public class AbstracRuleTest {
 		return ctx;
 	}
 
-	public static void test(Class<? extends AbstractRule> rule,
-			int expectedViolations, Properties p) {
-		String rulename = ClassUtil.className(rule.getName());
-		RuleContext ctx = TestUtils.testRuleOnTestbed(rulename, "java", rule,
-				expectedViolations, p);
-		dump(ctx);
+	/**
+	 * Prepara contexto y simula ejecución de Regla sin emplear un parser
+     *
+	 * @param rule
+	 * @param code
+	 * @param relativaPathFilename
+	 * @param srcFolder
+	 * @return
+	 */
+	RuleContext testWithoutParserFolder(Rule rule, String code,
+										String relativaPathFilename, String srcFolder) {
+
+		RuleContext ctx = new RuleContext();
+
+		File srcFolderFile = new File(srcFolder);
+		File codeFile = new File(srcFolderFile, relativaPathFilename);
+
+		ctx.setCurrentDirectory(srcFolderFile);
+		ctx.setSourceCodeFilename(codeFile);
+
+		ctx.setOriginalFileContents(TransformedContents.build(
+				ctx.getSourceCodeFilename(), code));
+
+
+		rule.initialize(ctx);
+		rule.apply(null, ctx); //no se trabaja con arbol AST
+		rule.postProcess(ctx);
+
+		//dump violations
+		System.out.println("Violaciones encontradas:");
+		for (RuleViolation rv : ctx.getReport()) {
+			System.out.println(rv);
+		}
+
+		return ctx;
 	}
+
 
 	/**
 	 * Check that violations are emitted in the expected lines. Useful for tests

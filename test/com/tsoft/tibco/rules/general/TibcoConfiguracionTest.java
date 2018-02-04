@@ -4,13 +4,14 @@ package com.tsoft.tibco.rules.general;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import com.tsoft.tibco.rules.AbstracRuleTest;
 import org.junit.Test;
 
 
 import com.als.core.RuleContext;
 import com.tsoft.tibco.rules.TibcoAtomicoValidTargetNamespace;
 
-public class TibcoConfiguracionTest extends AbstracRuleTest{
+public class TibcoConfiguracionTest extends AbstracRuleTest {
 
 	@Test
 	public void testBadCode(){
@@ -22,7 +23,7 @@ public class TibcoConfiguracionTest extends AbstracRuleTest{
 		String srcFolder = "c:/srcFolder"; 
 		String BAD_CODE = readTestFile(testfilename);
 
-		RuleContext rc = TibcoValidNamespaceRuleTest.testWithSrcFolder(rule, BAD_CODE, testfilename, srcFolder);
+		RuleContext rc = testWithXmlParserFolder(rule, BAD_CODE, testfilename, srcFolder);
 		
 		//lineas con violaciones
 		check(rc, " test webservices ", 52);

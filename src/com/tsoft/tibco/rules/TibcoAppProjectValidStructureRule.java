@@ -27,26 +27,29 @@ public class TibcoAppProjectValidStructureRule extends AbstractRule {
 
     public void initialize(RuleContext a) {
 
+        //como nombres de carpeta se aceptan solo A-Z a-z 0-9 y _, como nombre de archivo: A-Z a-z 0-9 _ y -
         validStructure.add(Pattern.compile(".*\\.folder"));
         validStructure.add(Pattern.compile(".*vcrepo.dat"));
-        validStructure.add(Pattern.compile(".*/AESchemas/.*\\.aeschema"));
-        validStructure.add(Pattern.compile(".*/defaultVars/.*defaultVars\\.substvar"));
+        validStructure.add(Pattern.compile(".*/AESchemas(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.aeschema"));
+        validStructure.add(Pattern.compile(".*/defaultVars(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.substvar"));
         validStructure.add(Pattern.compile(".*/EAR(/.*)?"));
         validStructure.add(Pattern.compile(".*/Deployment(/.*)?"));
-        validStructure.add(Pattern.compile(".*/Process/(MAIN|Main)/([^\\/]*)\\.process"));
-        validStructure.add(Pattern.compile(".*/Process/(MAIN|Main)/STARTPROCESS/([^\\/]*)\\.process"));
-        validStructure.add(Pattern.compile(".*/Process/(SUBPROCESS|SubProcess)/([^\\/]*)\\.process"));
-        validStructure.add(Pattern.compile(".*/Process/(SUBPROCESS|SubProcess)/ATOMICO/([^\\/]*)\\.process"));
-        validStructure.add(Pattern.compile(".*/Process/(SUBPROCESS|SubProcess)/UTILITIES/([^\\/]*)\\.process"));
-        validStructure.add(Pattern.compile(".*/Process/RESTJSON/([^\\/]*)\\.process"));
+        validStructure.add(Pattern.compile(".*/Process/(MAIN|Main)(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.process"));
+        validStructure.add(Pattern.compile(".*/Process/(SUBPROCESS|SubProcess)(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.process"));
+        validStructure.add(Pattern.compile(".*/Process/(RESTJSON|RestJson)(/[A-Za-z0-9_]*)*/[A-Za-z0-9_]-*\\.process"));
+
+        validStructure.add(Pattern.compile(".*/Resources/Connections(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.[a-z]*shared[a-z]+]"));
         validStructure.add(Pattern.compile(".*/Resources/Policies/.*"));
         validStructure.add(Pattern.compile(".*/Resources/Library/.*"));
-        validStructure.add(Pattern.compile(".*/Resources/Schemas/([^\\/]*)\\.xsd"));
-        validStructure.add(Pattern.compile(".*/Resources/Connections/([^\\/]*)\\.sharedhttp"));
-        validStructure.add(Pattern.compile(".*/Resources/Connections/([^\\/]*)\\.sharedjdbc"));
-        validStructure.add(Pattern.compile(".*/Resources/Connections/([^\\/]*)\\.sharedjms"));
-        validStructure.add(Pattern.compile(".*/Services/.*\\.wsdl"));
-        validStructure.add(Pattern.compile(".*/Services/.*.serviceagent"));
+        validStructure.add(Pattern.compile(".*/Resources/Schemas(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.xsd"));
+        validStructure.add(Pattern.compile(".*/Resources/Xml(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.xml"));
+        validStructure.add(Pattern.compile(".*/Resources/Xslt(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.xslt"));
+        validStructure.add(Pattern.compile(".*/Resources/Parse(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.[a-z]*parse"));
+
+        validStructure.add(Pattern.compile(".*/Resources/Wsdl(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.wsdl"));
+        validStructure.add(Pattern.compile(".*/Services(/[A-Za-z0-9_]*)*/[A-Za-z0-9_-]*\\.(serviceagent|wsdl)"));
+
+
 
     }
 
@@ -58,6 +61,13 @@ public class TibcoAppProjectValidStructureRule extends AbstractRule {
 
     }
 
+    /**
+     * Analiza de forma recursiva la estructura de carpetas y archivos analizados.
+     *
+     * @param currentDirectory
+     * @param rootDirectory
+     * @param ctx
+     */
     private void processFolder(File currentDirectory, String rootDirectory, RuleContext ctx) {
 
         if (currentDirectory.isDirectory()) {
@@ -73,9 +83,10 @@ public class TibcoAppProjectValidStructureRule extends AbstractRule {
         boolean pathIsValid = false;
         for (Pattern validPath : validStructure) {
 
+            //si cumple alguno de los patrones, el path es correcto
             if (validPath.matcher(filepath.replaceAll("\\\\", "/")).matches()) {
                 pathIsValid = true;
-                log.debug(String.format("path %s matches %s", filepath, validPath));
+                log.debug(String.format("path correcto %s matches %s", filepath, validPath));
 
             }
         }
@@ -83,7 +94,7 @@ public class TibcoAppProjectValidStructureRule extends AbstractRule {
         if (!pathIsValid) {
             ctx.getReport().addRuleViolation(
                     new RuleViolation(this, 1,
-                            String.format("carpeta o archivo no cumple con normativa: %s", filepath),
+                            String.format("carpeta o archivo no cumple con norma de diseño: %s", filepath),
                             new File(rootDirectory + filepath)));
         }
     }

@@ -10,32 +10,80 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class TibcoGlobalVariablesRuleTest extends AbstracRuleTest{
+public class TibcoGlobalVariablesRuleTest extends AbstracRuleTest {
 
 
     TemporaryFolder tempFolder = new TemporaryFolder();
 
+
+
     @Test
     public void correctVariablesShouldNotFail() {
 
-
+        File testFolder = new File("./test/resources/testglobalvariable/validFolder");
+        String sourceFile = "INFO/defaultVars.substvar";
         try {
-            File testFolder = new File("./test/resources");
-            File testSource = new File(testFolder, "globalVariable/defaultVars.substvar");
-
+            File testSource = new File(testFolder, sourceFile);
 
             TibcoGlobalVariablesRule rule = new TibcoGlobalVariablesRule();
 
 
-            RuleContext rc = testWithSrcFolder(rule, IOUtils.slurp(testSource),
-                    "globalVariable/defaultVars.substvar", testFolder.getPath());
+            RuleContext rc = testWithXmlParserFolder(rule, IOUtils.slurp(testSource),
+                    sourceFile, testFolder.getPath());
 
             //test sin violaciones
             check(rc, " test correct variables ");
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             fail();
         }
     }
+
+    @Test
+    public void incorrectGlobalVariableFilesShouldFail() {
+
+        File testFolder = new File("./test/resources/testglobalvariable/badName");
+        String sourceFile = "HTTP/badDefaultVars.substvar";
+        try {
+            File testSource = new File(testFolder, sourceFile);
+
+            TibcoGlobalVariablesRule rule = new TibcoGlobalVariablesRule();
+
+
+            RuleContext rc = testWithXmlParserFolder(rule, IOUtils.slurp(testSource),
+                    sourceFile, testFolder.getPath());
+
+            //test sin violaciones
+            check(rc, " test correct variables ",  1, 1, 4, 20, 28);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void incorrectGlobalVariablePathShouldFail() {
+
+        File testFolder = new File("./test/resources/testglobalvariable/badFolder");
+        String sourceFile = "http/defaultVars.substvar";
+        try {
+            File testSource = new File(testFolder, sourceFile);
+
+            TibcoGlobalVariablesRule rule = new TibcoGlobalVariablesRule();
+
+
+            RuleContext rc = testWithXmlParserFolder(rule, IOUtils.slurp(testSource),
+                    sourceFile, testFolder.getPath());
+
+            //test sin violaciones
+            check(rc, " test correct variables ", 1, 1, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+
+
+
 }

@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx12="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS79.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE62.xsd" xmlns:pfx5="http://itg.isban.cl/CL/PE/1MDPE62/ConsultaDomiciliosCliente" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://itg.isban.cl/wsCL1MDPE62_CONDomicilio" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/DIV/1MDIS79/EncuestaInversionista" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd">
+    <xsd:import namespace="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" schemaLocation="/Resources/Schemas/INFO.xsd"/>
+    <wsdl:import namespace="http://itg.isban.cl/CL/PE/1MDPE62/ConsultaDomiciliosCliente" location="/WebServices/wsCL1MDPE62-CONConsultaDomiciliosCliente.wsdl"/>
+    <wsdl:import namespace="http://itg.isban.cl/CL/DIV/1MDIS79/EncuestaInversionista" location="/WebServices/wsCL1MDIS79-CONEncuestaInversionista.wsdl"/>
+    <pd:name>Process/DatosCliente/CL1CO-CONDatosCliente.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="request_msgJSon" type="xsd:string"/>
+    </pd:startType>
+    <pd:startX>39</pd:startX>
+    <pd:startY>50</pd:startY>
+    <pd:returnBindings>
+        <xsl:choose>
+            <xsl:when test="$info/pfx7:INFO/pfx7:Codigo=$_globalVariables/ns1:GlobalVariables/INFO/CodOk">
+                <response_msgJSon>
+                    <xsl:value-of select="$Render-JSON/pfx2:ActivityOutputClass/jsonString"/>
+                </response_msgJSon>
+            </xsl:when>
+            <xsl:otherwise>
+                <response_msgJSon>
+                    <xsl:value-of select="$Render-JSON-Error/pfx2:ActivityOutputClass/jsonString"/>
+                </response_msgJSon>
+            </xsl:otherwise>
+        </xsl:choose>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="response_msgJSon" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>1188</pd:endX>
+    <pd:endY>48</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <buscaEmail>
+            <xsd:element name="fechaMayor" type="xsd:double"/>
+        </buscaEmail>
+        <contexto>
+            <xsd:element name="variables">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="EMAIL" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </contexto>
+        <info ref="pfx7:INFO"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://itg.isban.cl/AppInversiones/Process/CL1CO-CONDatosCliente</pd:targetNamespace>
+    <pd:group name="email">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>683</pd:x>
+        <pd:y>241</pd:y>
+        <pd:width>348</pd:width>
+        <pd:height>243</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:OUTPUT/ns3:DATA_RESPUESTA3</pd:over>
+            <pd:iterationElementSlot>EMAIL</pd:iterationElementSlot>
+            <pd:indexSlot>indEmail</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>fechaMayor</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>fechaMayor</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignEmail</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>fechaMayor</pd:from>
+            <pd:to>AssignFechaMayor</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>number(translate($EMAIL/ns3:DATA_RESPUESTA3/ns3:PEHSTAMP-M-R1,"-:.",""))&gt;$buscaEmail/fechaMayor and $EMAIL/ns3:DATA_RESPUESTA3/ns3:PETIPDOM-M-R1="ELE"</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>AssignFechaMayor</pd:from>
+            <pd:to>AssignEmail</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="AssignEmail">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>929</pd:x>
+            <pd:y>391</pd:y>
+            <config>
+                <variableName>contexto</variableName>
+            </config>
+            <pd:inputBindings>
+                <variables>
+                    <xsl:if test="$EMAIL/ns3:DATA_RESPUESTA3/ns3:PENOMCAL-M-R1">
+                        <EMAIL>
+                            <xsl:value-of select="$EMAIL/ns3:DATA_RESPUESTA3/ns3:PENOMCAL-M-R1"/>
+                        </EMAIL>
+                    </xsl:if>
+                </variables>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="fechaMayor">
+            <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+            <pd:resourceType>ae.activities.null</pd:resourceType>
+            <pd:x>788</pd:x>
+            <pd:y>296</pd:y>
+            <config/>
+            <pd:inputBindings/>
+        </pd:activity>
+        <pd:activity name="AssignFechaMayor">
+            <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+            <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+            <pd:x>790</pd:x>
+            <pd:y>407</pd:y>
+            <config>
+                <variableName>buscaEmail</variableName>
+            </config>
+            <pd:inputBindings>
+                <fechaMayor>
+                    <xsl:value-of select="number(translate($EMAIL/ns3:DATA_RESPUESTA3/ns3:PEHSTAMP-M-R1,&quot;-:.&quot;,&quot;&quot;))"/>
+                </fechaMayor>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>1238</pd:x>
+        <pd:y>310</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CodErr16_Domicilios">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>349</pd:x>
+        <pd:y>211</pd:y>
+        <config>
+            <variableName>info</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:INFO>
+                <pfx7:Codigo>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/CodErr"/>
+                </pfx7:Codigo>
+                <pfx7:Resultado>
+                    <xsl:value-of select="$PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:INFO/ns3:DESERR"/>
+                </pfx7:Resultado>
+                <pfx7:Mensaje>
+                    <xsl:value-of select="concat(&quot;Se obtuvo un error consultando los datos del cliente: &quot;,$Parse-JSON/pfx2:ActivityOutputClass/RutCliente)"/>
+                </pfx7:Mensaje>
+            </pfx7:INFO>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IS79_CONEncuestaInversionista">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>330</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <timeout>%%endPoint/timeOut%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx3:wsCL1MDIS79-CONEncuestaInversionista</service>
+            <servicePort>wsCL1MDIS79_CONEncuestaInversionista</servicePort>
+            <operation>getEncuestaInversionista</operation>
+            <soapAction>/Services/wsCL1MDIS79_CONEncuestaInversionista/getEncuestaInversionista</soapAction>
+            <endpointURL>%%endPoint/AppINVInversionesConsulta%%wsCL1MDIS79_CONEncuestaInversionista</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx12:INPUT>
+                    <pfx12:TXNAME>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx12:TXNAME>
+                    <pfx12:USUARIO-ALT>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Ambiente/HOST/USUARIO-ALT"/>
+                    </pfx12:USUARIO-ALT>
+                    <pfx12:TERMINAL-ALT>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx12:TERMINAL-ALT>
+                    <pfx12:CANAL-ID>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Ambiente/HOST/CANAL-ID"/>
+                    </pfx12:CANAL-ID>
+                    <pfx12:FILLER>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </pfx12:FILLER>
+                    <pfx12:Entidad>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Ambiente/Entidad"/>
+                    </pfx12:Entidad>
+                    <pfx12:Rut>
+                        <xsl:value-of select="$Parse-JSON/pfx2:ActivityOutputClass/RutCliente"/>
+                    </pfx12:Rut>
+                </pfx12:INPUT>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error_DatosClientePorRut">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>545</pd:x>
+        <pd:y>126</pd:y>
+        <config>
+            <variableName>info</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:INFO>
+                <pfx7:Codigo>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/CodErr"/>
+                </pfx7:Codigo>
+                <pfx7:Resultado>
+                    <xsl:value-of select="$_error/ns2:ErrorReport/StackTrace"/>
+                </pfx7:Resultado>
+                <pfx7:Mensaje>
+                    <xsl:value-of select="concat(&quot;Error consultando los datos del cliente: &quot;,$Parse-JSON/pfx2:ActivityOutputClass/RutCliente)"/>
+                </pfx7:Mensaje>
+            </pfx7:INFO>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error_Domicilios">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>367</pd:x>
+        <pd:y>285</pd:y>
+        <config>
+            <variableName>info</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:INFO>
+                <pfx7:Codigo>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/CodErr"/>
+                </pfx7:Codigo>
+                <pfx7:Resultado>
+                    <xsl:value-of select="$_error/ns2:ErrorReport/StackTrace"/>
+                </pfx7:Resultado>
+                <pfx7:Mensaje>
+                    <xsl:value-of select="concat(&quot;Error consultando los datos del cliente: &quot;,$Parse-JSON/pfx2:ActivityOutputClass/RutCliente)"/>
+                </pfx7:Mensaje>
+            </pfx7:INFO>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>696</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <pfx9:ActivityInput>
+                <message>
+                    <xsl:value-of select="$info/pfx7:INFO/pfx7:Mensaje"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$info/pfx7:INFO/pfx7:Resultado"/>
+                </messageCode>
+            </pfx9:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate-Error-1">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>497</pd:x>
+        <pd:y>286</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <pfx9:ActivityInput>
+                <message>
+                    <xsl:value-of select="$info/pfx7:INFO/pfx7:Mensaje"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$info/pfx7:INFO/pfx7:Resultado"/>
+                </messageCode>
+            </pfx9:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IniciaFechaMayor">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>566</pd:x>
+        <pd:y>370</pd:y>
+        <config>
+            <variableName>buscaEmail</variableName>
+        </config>
+        <pd:inputBindings>
+            <fechaMayor>
+                <xsl:value-of select="0"/>
+            </fechaMayor>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>43</pd:x>
+        <pd:y>176</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Datos de entrada al proceso: &quot;, $Start/request_msgJSon)"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log-1">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>965</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Respuesta Ok del proceso: &quot;,  $Render-JSON/pfx2:ActivityOutputClass/jsonString)"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log-2">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1253</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Respuesta con Error del proces: &quot;,$Render-JSON-Error/pfx2:ActivityOutputClass/jsonString)"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1109</pd:x>
+        <pd:y>312</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns2:ErrorReport/StackTrace"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="$_error/ns2:ErrorReport/MsgCode"/>
+                </msgCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogOk_IS79_CONEncuestaInversionista">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>592</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Respuesta Ok del WS: &quot;,tib:render-xml($IS79_CONEncuestaInversionista/outputMessage/pfx12:TIB_IS79_CONEncuestaInversionista_Response))"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="count($IS79_CONEncuestaInversionista/outputMessage/pfx12:TIB_IS79_CONEncuestaInversionista_Response/pfx12:OUTPUT/pfx12:MATRIZ/pfx12:DescCorta)"/>
+                </msgCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse JSON">
+        <pd:type>com.tibco.plugin.json.activities.JSONParserActivity</pd:type>
+        <pd:resourceType>ae.activities.JSONParserActivity</pd:resourceType>
+        <pd:x>199</pd:x>
+        <pd:y>123</pd:y>
+        <config>
+            <SchemaType>xsdType</SchemaType>
+            <BadgerfishCheck>false</BadgerfishCheck>
+            <ActivityOutputEditor>
+                <xsd:element name="RutCliente" type="xsd:string"/>
+            </ActivityOutputEditor>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInputClass>
+                <jsonString>
+                    <xsl:value-of select="$Start/request_msgJSon"/>
+                </jsonString>
+            </pfx2:ActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PE62-DomiciliosCliente">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>199</pd:x>
+        <pd:y>367</pd:y>
+        <config>
+            <timeout>%%endPoint/timeOut%%</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <timeoutType>Seconds</timeoutType>
+            <service>pfx5:wsCL1MDPE62-CONConsultaDomiciliosCliente</service>
+            <servicePort>wsCL1MDPE62_CONConsultaDomiciliosCliente</servicePort>
+            <operation>getConsultaDomiciliosCliente</operation>
+            <soapAction>/Services/wsCL1MDPE62_CONConsultaDomiciliosCliente/getConsultaDomiciliosCliente</soapAction>
+            <endpointURL>%%endPoint/AppPEPersonasConsulta%%wsCL1MDPE62_CONConsultaDomiciliosCliente</endpointURL>
+            <authScheme>NONE</authScheme>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <ns3:INPUT>
+                    <ns3:USUARIO-ALT>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Ambiente/HOST/USUARIO-ALT"/>
+                    </ns3:USUARIO-ALT>
+                    <ns3:TERMINAL-ALT>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:TERMINAL-ALT>
+                    <ns3:CANAL-ID>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Ambiente/HOST/CANAL-ID"/>
+                    </ns3:CANAL-ID>
+                    <ns3:FILLER>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:FILLER>
+                    <ns3:PENUMPE>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:PENUMPE>
+                    <ns3:TIPDOC>
+                        <xsl:value-of select="&quot;R&quot;"/>
+                    </ns3:TIPDOC>
+                    <ns3:PENUMDO>
+                        <xsl:value-of select="$Parse-JSON/pfx2:ActivityOutputClass/RutCliente"/>
+                    </ns3:PENUMDO>
+                    <ns3:SECDOM>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:SECDOM>
+                    <ns3:PEINDSE>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:PEINDSE>
+                    <ns3:ID-RECALL>
+                        <xsl:value-of select="&quot;&quot;"/>
+                    </ns3:ID-RECALL>
+                </ns3:INPUT>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Render JSON">
+        <pd:type>com.tibco.plugin.json.activities.JSONRenderActivity</pd:type>
+        <pd:resourceType>ae.activities.JSONRenderActivity</pd:resourceType>
+        <pd:x>852</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <SchemaType>xsdType</SchemaType>
+            <BadgerfishCheck>false</BadgerfishCheck>
+            <removeRootElementForInput>true</removeRootElementForInput>
+            <ActivityInputEditor>
+                <xsd:element name="SALIDA">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx7:INFO"/>
+                            <xsd:element name="OUTPUT" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="NOMBRE_CLIENTE" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="NOMBRE_COMPLETO_CLIENTE" type="xsd:string"/>
+                                        <xsd:element name="EMAIL" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="PERFIL_INVERSIONISTA" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="FECHA_ACTUALIZACION_PERFIL" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </ActivityInputEditor>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInputClass>
+                <SALIDA>
+                    <pfx7:INFO>
+                        <pfx7:Codigo>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/CodOk"/>
+                        </pfx7:Codigo>
+                        <pfx7:Resultado>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/MsjOk"/>
+                        </pfx7:Resultado>
+                        <pfx7:Mensaje>
+                            <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/MsjOk"/>
+                        </pfx7:Mensaje>
+                    </pfx7:INFO>
+                    <OUTPUT>
+                        <NOMBRE_CLIENTE>
+                            <xsl:value-of select="substring-before(concat($PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:OUTPUT/ns3:DATA_RESPUESTA1/ns3:PENOMPER,&quot; &quot;), &quot; &quot;)"/>
+                        </NOMBRE_CLIENTE>
+                        <NOMBRE_COMPLETO_CLIENTE>
+                            <xsl:value-of select="concat($PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:OUTPUT/ns3:DATA_RESPUESTA1/ns3:PENOMPER, &quot; &quot;, $PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:OUTPUT/ns3:DATA_RESPUESTA1/ns3:PEPRIAPE, &quot; &quot;, $PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:OUTPUT/ns3:DATA_RESPUESTA1/ns3:PESEGAPE)"/>
+                        </NOMBRE_COMPLETO_CLIENTE>
+                        <EMAIL>
+                            <xsl:value-of select="$contexto/variables/EMAIL"/>
+                        </EMAIL>
+                        <xsl:choose>
+                            <xsl:when test="count($IS79_CONEncuestaInversionista/outputMessage/pfx12:TIB_IS79_CONEncuestaInversionista_Response/pfx12:OUTPUT/pfx12:MATRIZ/pfx12:DescCorta)>0">
+                                <PERFIL_INVERSIONISTA>
+                                    <xsl:value-of select="$IS79_CONEncuestaInversionista/outputMessage/pfx12:TIB_IS79_CONEncuestaInversionista_Response/pfx12:OUTPUT/pfx12:MATRIZ[1]/pfx12:DescCorta"/>
+                                </PERFIL_INVERSIONISTA>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <PERFIL_INVERSIONISTA>
+                                    <xsl:value-of select="&quot;SIN PERFIL&quot;"/>
+                                </PERFIL_INVERSIONISTA>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </OUTPUT>
+                </SALIDA>
+            </pfx2:ActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Render-JSON-Error">
+        <pd:type>com.tibco.plugin.json.activities.JSONRenderActivity</pd:type>
+        <pd:resourceType>ae.activities.JSONRenderActivity</pd:resourceType>
+        <pd:x>1110</pd:x>
+        <pd:y>187</pd:y>
+        <config>
+            <SchemaType>xsdType</SchemaType>
+            <BadgerfishCheck>false</BadgerfishCheck>
+            <removeRootElementForInput>false</removeRootElementForInput>
+            <ActivityInputEditor ref="pfx7:INFO"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInputClass>
+                <pfx7:INFO>
+                    <pfx7:Codigo>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/CodErr"/>
+                    </pfx7:Codigo>
+                    <pfx7:Resultado>
+                        <xsl:value-of select="$_error/ns2:ErrorReport/Msg"/>
+                    </pfx7:Resultado>
+                    <pfx7:Mensaje>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/MsjErr"/>
+                    </pfx7:Mensaje>
+                </pfx7:INFO>
+            </pfx2:ActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>1093</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <variableName>info</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:INFO>
+                <pfx7:Codigo>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/CodOk"/>
+                </pfx7:Codigo>
+                <pfx7:Resultado>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/MsjOk"/>
+                </pfx7:Resultado>
+                <pfx7:Mensaje>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/INFO/MsjOk"/>
+                </pfx7:Mensaje>
+            </pfx7:INFO>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse JSON</pd:from>
+        <pd:to>IS79_CONEncuestaInversionista</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render JSON</pd:from>
+        <pd:to>Log-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>Render-JSON-Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Render-JSON-Error</pd:from>
+        <pd:to>Log-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse JSON</pd:from>
+        <pd:to>PE62-DomiciliosCliente</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IS79_CONEncuestaInversionista</pd:from>
+        <pd:to>LogOk_IS79_CONEncuestaInversionista</pd:to>
+        <pd:xpathDescription>Ok</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PE62-DomiciliosCliente</pd:from>
+        <pd:to>IniciaFechaMayor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:INFO/ns3:CODERR="00" or
+$PE62-DomiciliosCliente/outputMessage/ns3:TIB_PE62_CONConsultaDomiciliosCliente_Response/ns3:INFO/ns3:CODERR="04"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>email</pd:from>
+        <pd:to>Render JSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IniciaFechaMayor</pd:from>
+        <pd:to>email</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Parse JSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log-1</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log-2</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IS79_CONEncuestaInversionista</pd:from>
+        <pd:to>Error_DatosClientePorRut</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogOk_IS79_CONEncuestaInversionista</pd:from>
+        <pd:to>Render JSON</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error_DatosClientePorRut</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CodErr16_Domicilios</pd:from>
+        <pd:to>Generate-Error-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error_Domicilios</pd:from>
+        <pd:to>Generate-Error-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PE62-DomiciliosCliente</pd:from>
+        <pd:to>CodErr16_Domicilios</pd:to>
+        <pd:xpathDescription>Sin datos</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PE62-DomiciliosCliente</pd:from>
+        <pd:to>Error_Domicilios</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

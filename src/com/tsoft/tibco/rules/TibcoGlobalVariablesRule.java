@@ -29,7 +29,7 @@ public class TibcoGlobalVariablesRule extends AbstractRule {
     /**
      * valid camel case pattern
      */
-    private Pattern camelCasePattern = Pattern.compile("(([A-Z]+[a-z0-9]*)+)");
+    private Pattern camelCasePattern = Pattern.compile("([A-Z]+[a-z0-9]*([A-Z]+[a-z0-9-]*)*)");
 
     /**
      * valid variable path estructure files
@@ -98,7 +98,7 @@ public class TibcoGlobalVariablesRule extends AbstractRule {
 
         //valida nombres de variables buscando /repository/globalVariables/globalVariable/name
         if (repositorynode.isTypeName("repository")
-                && TIBCOTYPESURI.equals(repositorynode.getNamespaceURI())) {
+                && TIBCOTYPESURI.equalsIgnoreCase(repositorynode.getNamespaceURI())) {
 
             log.info("Analysing global variables " + currentFilepath);
 
@@ -137,8 +137,6 @@ public class TibcoGlobalVariablesRule extends AbstractRule {
         }
 
         log.info(" substvar file paths founds " + foundPaths);
-        System.out.println("p " + foundVariablePaths);
-        System.out.println("p " + foundPaths);
 
 
         for(String path : foundPaths.keySet()) {
@@ -199,6 +197,7 @@ public class TibcoGlobalVariablesRule extends AbstractRule {
                 && TIBCOTYPESURI.equals(xmlnode.getNamespaceURI())) {
 
             String variableName = getVariableName(xmlnode);
+
             if (variableName != null) {
                 foundVariablesList.add(new TibcoVariable(variableName, node.getBeginLine(), filepath, currentFile));
             }

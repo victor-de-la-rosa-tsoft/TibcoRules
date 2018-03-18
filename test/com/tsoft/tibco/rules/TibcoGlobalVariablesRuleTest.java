@@ -79,11 +79,31 @@ public class TibcoGlobalVariablesRuleTest extends AbstracRuleTest {
             check(rc, " test correct variables ", 1, 1, 1);
         } catch (IOException e) {
             e.printStackTrace();
-            fail();
+            fail(e.getMessage());
         }
     }
 
 
+    @Test
+    public void camelCaseValidationShouldNotGenerateStackOverflow() {
+        File testFolder = new File("./test/resources/testglobalvariable/camelcase");
+        String sourceFile = "DEFAULT/defaultVars.substvar";
+        try {
+            File testSource = new File(testFolder, sourceFile);
+
+            TibcoGlobalVariablesRule rule = new TibcoGlobalVariablesRule();
+
+
+            RuleContext rc = testWithXmlParserFolder(rule, IOUtils.slurp(testSource),
+                    sourceFile, testFolder.getPath());
+
+            //test sin violaciones
+            check(rc, " test correct variables ", 1, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 
 
 }

@@ -1,23 +1,18 @@
 package com.tsoft.tibco.rules;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.StringReader;
-import java.util.Properties;
-
-import org.junit.BeforeClass;
-
-import com.als.core.AbstractRule;
 import com.als.core.Rule;
 import com.als.core.RuleContext;
 import com.als.core.RuleViolation;
 import com.als.core.ast.BaseNode;
 import com.als.core.io.TransformedContents;
 import com.als.core.parser.XmlParser;
-import com.als.core.util.ClassUtil;
-import com.optimyth.qaking.test.TestUtils;
 import com.optimyth.qaking.xml.PositionAwareDOMParser;
+import org.junit.BeforeClass;
+
+import java.io.File;
+import java.io.StringReader;
+
+import static org.junit.Assert.assertEquals;
 
 public class AbstracRuleTest {
 

@@ -1,14 +1,10 @@
 package com.tsoft.tibco.rules;
 
-import static org.junit.Assert.*;
+import com.als.core.RuleContext;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-
-import org.junit.Test;
-
-import com.als.core.RuleContext;
-import com.tsoft.tibco.rules.general.TibcoValidNamespaceRuleTest;
 
 public class TibcoAtomicoSPValidElementsTest extends AbstracRuleTest{
 
@@ -33,7 +29,7 @@ public class TibcoAtomicoSPValidElementsTest extends AbstracRuleTest{
 		StringBuffer content = new StringBuffer();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(
-					TibcoValidNamespaceRuleTest.class.getResource(path).getFile()));
+					TibcoAtomicoSPValidElements.class.getResource(path).getFile()));
 			String line;
 			while ((line = br.readLine()) != null) {
 				content.append(line).append(System.getProperty("line.separator"));

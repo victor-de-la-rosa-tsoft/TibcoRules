@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>validAtomico.process</pd:name>
+    <pd:startName>HTTP Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="HTTP Receiver">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>81</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <outputMode>String</outputMode>
+            <defaultEncoding>ISO8859_1</defaultEncoding>
+            <inputOutputVersion>5.3.0</inputOutputVersion>
+            <newMimeSupport>true</newMimeSupport>
+            <sharedChannel>/Resources/Connections/HTTP Connection.sharedhttp</sharedChannel>
+            <customField/>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>528</pd:endX>
+    <pd:endY>35</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://itg.isban.cl/CL/SCT/1MDBN2C/Process/CONImpresionContrato</pd:targetNamespace>
+    <pd:activity name="REST Dispatch and Reply">
+        <pd:type>com.tibco.plugin.json.rest.server.activities.RestAdapterActivity</pd:type>
+        <pd:resourceType>rest.activities.RestAdapter</pd:resourceType>
+        <pd:x>278</pd:x>
+        <pd:y>43</pd:y>
+        <config>
+            <eventSource>HTTP Receiver</eventSource>
+            <EnableWADLReference>false</EnableWADLReference>
+            <RestService>
+                <InnerService>
+                    <ns0:application xmlns:ns0="http://wadl.dev.java.net/2009/02" name="Application">
+                        <ns0:resources name="wsCL1DPTR54-CONImpresionContrato" base="%%PortHttp/BaseURLRest%%">
+                            <ns0:resource id="Generales" path="Generales">
+                                <ns0:doc>Consulta de documentos</ns0:doc>
+                                <ns0:resource id="ConsultaDeDiasHabiles" path="ConsultaDeDiasHabiles">
+                                    <ns0:doc>Retorna los valores de días hábiles en base a una  fecha indicada en base a las componentes ARKQ003 y CDIAHABIL</ns0:doc>
+                                    <ns0:method id="getConsultaDeDiasHabiles" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/Sistema/CL1CO-CONDiasHabiles.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://xmlns.tibco.com/encodings/mime" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/TCFE.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="http://itg.isban.cl/CL/SIS/1MDQG11/FechaContableModoTarde" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/BG/1MDK520/TEFaCtaAdminFondos" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx7="http://itg.isban.cl/CL/SIS/1MDTCFE/FechaEsHabil" xmlns:pfx6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/QG11.xsd">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://xmlns.tibco.com/encodings/mime" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/TCFE.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="http://itg.isban.cl/CL/SIS/1MDQG11/FechaContableModoTarde" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/BG/1MDK520/TEFaCtaAdminFondos" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx7="http://itg.isban.cl/CL/SIS/1MDTCFE/FechaEsHabil" xmlns:pfx6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/QG11.xsd" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                            </ns0:resource>
+                            <ns0:resource id="DatosCliente" path="DatosCliente">
+                                <ns0:doc>Consulta de documentos</ns0:doc>
+                                <ns0:resource id="CuentasHabilitadasCliente" path="CuentasHabilitadasCliente">
+                                    <ns0:doc>Servicio para consultar las cuentas habilitadas del cliente para inversion</ns0:doc>
+                                    <ns0:method id="getCuentasHabilitadasCliente" name="POST">
+                                        <ns0:doc>Cruce de productos On-Lite</ns0:doc>
+                                        <Binding process="/Process/DatosCliente/CL1CO-CONCuentasHabilitadasCliente.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://xmlns.tibco.com/encodings/mime" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PEGX.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1CO-CONCuentasHabilitadasCliente.xsd" xmlns:pfx4="http://itg.isban.cl/CL/PE/1MDPEGX/CruceProductosOnLine" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CONCruceProductosOnLine.xsd" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/json">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://xmlns.tibco.com/encodings/mime" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PEGX.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1CO-CONCuentasHabilitadasCliente.xsd" xmlns:pfx4="http://itg.isban.cl/CL/PE/1MDPEGX/CruceProductosOnLine" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CONCruceProductosOnLine.xsd" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/json">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="ConsultaDatosCliente" path="ConsultaDatosCliente">
+                                    <ns0:doc>Servicio para consultar los datos del cliente</ns0:doc>
+                                    <ns0:method id="getConsultaDatosCliente" name="POST">
+                                        <ns0:doc>ConsultaDatosCliente</ns0:doc>
+                                        <Binding process="/Process/DatosCliente/CL1CO-CONDatosCliente.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx12="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS79.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE62.xsd" xmlns:pfx5="http://itg.isban.cl/CL/PE/1MDPE62/ConsultaDomiciliosCliente" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://itg.isban.cl/wsCL1MDPE62_CONDomicilio" xmlns:pfx3="http://itg.isban.cl/CL/DIV/1MDIS79/EncuestaInversionista" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx12="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS79.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE62.xsd" xmlns:pfx5="http://itg.isban.cl/CL/PE/1MDPE62/ConsultaDomiciliosCliente" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://itg.isban.cl/wsCL1MDPE62_CONDomicilio" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/DIV/1MDIS79/EncuestaInversionista" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="SolicitarDesafio" path="SolicitarDesafio">
+                                    <ns0:doc>Servicio para solicitar Desafio</ns0:doc>
+                                    <ns0:method id="getSolicitarDesafio" name="POST">
+                                        <ns0:doc>SolicitarDesafio</ns0:doc>
+                                        <Binding process="/Process/DatosCliente/CL1CO-CONSolicitarDesafio.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/SuperClave_SolicitarDesafio.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://xmlns.tibco.com/encodings/mime" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CONCruceProductosOnLine.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1CO-CONSolicitarDesafio.xsd" xmlns:pfx2="http://itg.isban.cl/CL/PE/1WSSuperClave/SolicitarDesafio" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                <xsl:template xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/SuperClave_SolicitarDesafio.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://xmlns.tibco.com/encodings/mime" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CONCruceProductosOnLine.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1CO-CONSolicitarDesafio.xsd" xmlns:pfx2="http://itg.isban.cl/CL/PE/1WSSuperClave/SolicitarDesafio" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                            </ns0:resource>
+                            <ns0:resource id="FFMM" path="FFMM">
+                                <ns0:doc>Servicios de fondos mutuos</ns0:doc>
+                                <ns0:resource id="ConsultaValoresCuota" path="ConsultaValoresCuota">
+                                    <ns0:doc>Consulta Valores cuota</ns0:doc>
+                                    <ns0:method id="getConsultaValoresCuota" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-CONValoresCuota.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_valcuota_rentabilidad.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaValoresCuota" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_valcuota_rentabilidad.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaValoresCuota" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns6="http://xmlns.tibco.com/encodings/mime" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="FondosHabilitadosParaInvertir" path="FondosHabilitadosParaInvertir">
+                                    <ns0:doc>Servicios para consulta FFMM habilitados para invertir por cliente</ns0:doc>
+                                    <ns0:method id="getFFMMHabilitadosParaInvertir" name="POST">
+                                        <ns0:doc>Consulta FFMM habilitados para invertir por cliente</ns0:doc>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-CONFFMMHabilitadosParaInvertir.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_rentabilidad.xsd" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS38.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS43.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fm_consulta_fondos_Rut.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx5="http://itg.isban.cl/CL/DIV/1MDIS38/ModeloDAI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://itg.isban.cl/CL/DIV/1MDIS43/ProductoCanalDAI" xmlns:pfx3="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1INFO.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/RentabilidadFondos" xmlns:pfx6="http://itg.isban.cl/CL/AGF/1SPSQLS/FondosYSeries">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_rentabilidad.xsd" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS38.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/IS43.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fm_consulta_fondos_Rut.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/DIV/1MDIS38/ModeloDAI" xmlns:pfx4="http://itg.isban.cl/CL/DIV/1MDIS43/ProductoCanalDAI" xmlns:pfx3="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1INFO.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/RentabilidadFondos" xmlns:pfx6="http://itg.isban.cl/CL/AGF/1SPSQLS/FondosYSeries">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="ConfirmaInversion" path="ConfirmaInversion">
+                                    <ns0:doc>Confirmacion de inversion de FFMM</ns0:doc>
+                                    <ns0:method id="getConfirmaInversion" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-MANConfirmaInversion.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:pfx12="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:pfx10="http://itg.isban.cl/CL/BG/1MDK443/MvtoDepoDocCta" xmlns:pfx5="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PEGX.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/CL/SIS/1MDTCFE/FechaEsHabil" xmlns:pfx8="http://itg.isban.cl/CL/BG/1MDKC02/CartolaProvisoriaEnLinea" xmlns:pfx7="http://itg.isban.cl/CL/BG/1MDK520/TEFaCtaAdminFondos" xmlns:pfx6="http://itg.isban.cl/CL/AGF/1SPSQLS/GrabacionSuscripcion" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://itg.isban.cl/BackEndProcess/Resources/Schemas/K443.xsd" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fm_consulta_fondos_Rut.xsd" xmlns:ns6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns10="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/K520.xsd" xmlns:ns11="http://www.tibco.com/pe/EngineTypes" xmlns:ns8="http://itg.isban.cl/BackEndProcess/Resources/Schemas/KC02.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/SuperClave_ValidarDesafio.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_graba_suscripcion.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:pfx12="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://itg.isban.cl/CL/BG/1MDK443/MvtoDepoDocCta" xmlns:pfx5="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PEGX.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/CL/SIS/1MDTCFE/FechaEsHabil" xmlns:pfx8="http://itg.isban.cl/CL/BG/1MDKC02/CartolaProvisoriaEnLinea" xmlns:pfx7="http://itg.isban.cl/CL/BG/1MDK520/TEFaCtaAdminFondos" xmlns:pfx6="http://itg.isban.cl/CL/AGF/1SPSQLS/GrabacionSuscripcion" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns9="http://itg.isban.cl/BackEndProcess/Resources/Schemas/K443.xsd" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fm_consulta_fondos_Rut.xsd" xmlns:ns6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns10="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/K520.xsd" xmlns:ns11="http://www.tibco.com/pe/EngineTypes" xmlns:ns8="http://itg.isban.cl/BackEndProcess/Resources/Schemas/KC02.xsd" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/SuperClave_ValidarDesafio.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_graba_suscripcion.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="SaldosConsolidado" path="SaldosConsolidado">
+                                    <ns0:doc>Servicio para consultar los saldos consolidados de FFMM</ns0:doc>
+                                    <ns0:method id="getSaldosConsolidadoFFMM" name="POST">
+                                        <ns0:doc>SaldosConsolidadoFFMM</ns0:doc>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-CONSaldosConsolidadoFFMM.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx="http://itg.isban.cl/CL/AGF/1SPSQLS/SaldosConsolidadoFFMM" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fmfondos_por_Rut.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://itg.isban.cl/CL/PE/1MDPEGX/CruceProductosOnLine" xmlns:pfx2="http://itg.isban.cl/CL/DIV/1SPORAC/ConsultaDatosClientePorRut" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1INFO.xsd">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx="http://itg.isban.cl/CL/AGF/1SPSQLS/SaldosConsolidadoFFMM" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fmfondos_por_Rut.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://itg.isban.cl/CL/PE/1MDPEGX/CruceProductosOnLine" xmlns:pfx2="http://itg.isban.cl/CL/DIV/1SPORAC/ConsultaDatosClientePorRut" xmlns:pfx7="http://itg.isban.cl/AppInversiones/Resources/Schemas/CL1INFO.xsd">
+                                                    <RESTResponse>
+                                                        <asciiContent>
+                                                            <xsl:value-of select="$End/response_msgJSon"/>
+                                                        </asciiContent>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="ComisionRescate" path="ComisionRescate">
+                                    <ns0:doc>Consulta la comision del rescate</ns0:doc>
+                                    <ns0:method id="getComisionRescate" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-CONComisionRescate.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PRTF_FM_CON_CUOTAS_AFECTAS_PAR.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:ns4="http://xmlns.tibco.com/encodings/mime" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/AGF/1SPSQLS/RescateAvisoCobroComision" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema">
+                                                <xsl:template xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PRTF_FM_CON_CUOTAS_AFECTAS_PAR.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://xmlns.tibco.com/encodings/mime" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/AGF/1SPSQLS/RescateAvisoCobroComision" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="ConfirmaRescate" path="ConfirmaRescate">
+                                    <ns0:doc>Confirmacion de rescate total o parcial de un fondo mutuo especifico</ns0:doc>
+                                    <ns0:method id="getConfirmaRescate" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-MANConfirmaRescate.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_graba_rescate.xsd" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_rentabilidad.xsd" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns8="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP002.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/GrabacionRescate" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://itg.isban.cl/CL/ACL/1MDCLVSP002/ValidaDesafio" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx2="http://www.tibco.com/pe/WriteToLogActivitySchema">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_graba_rescate.xsd" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_fm_rentabilidad.xsd" xmlns:pfx="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns8="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP002.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/GrabacionRescate" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://itg.isban.cl/CL/ACL/1MDCLVSP002/ValidaDesafio" xmlns:pfx3="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx2="http://www.tibco.com/pe/WriteToLogActivitySchema" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="TransferenciaFondos" path="TransferenciaFondos">
+                                    <ns0:doc/>
+                                    <ns0:method id="getTransferenciaFondos" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/FondosMutuos/CL1CO-MANTransferenciaFondos.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_Graba_Transferencia_Inter.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/TC/1SPSQLS/GrabaTransEntreFondosInterna" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:pfx8="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:pfx7="http://itg.isban.cl/CL/LDT/1MDLDAP0001/ValidaPINCliente" xmlns:pfx6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/LDAP0001.xsd">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prtf_Graba_Transferencia_Inter.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/TC/1SPSQLS/GrabaTransEntreFondosInterna" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:pfx8="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:pfx7="http://itg.isban.cl/CL/LDT/1MDLDAP0001/ValidaPINCliente" xmlns:pfx6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/LDAP0001.xsd">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                            </ns0:resource>
+                            <ns0:resource id="ContratoLUF" path="ContratoLUF">
+                                <ns0:doc>Contrato General de Fondos</ns0:doc>
+                                <ns0:resource id="Verifica" path="Verifica">
+                                    <ns0:doc>FFMM - Verifica si el cliente a firmado el contrato general de fondos</ns0:doc>
+                                    <ns0:method id="getContratoLUFVerifica" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/ContratoLUF/CL1CO-CONVerifica.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP001.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/KT71.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PRTF_VALIDA_CONTRATO_GENERAL.xsd" xmlns:pfx8="http://itg.isban.cl/CL/TC/1MDKT71/ComunaCuidadRegion" xmlns:pfx7="http://itg.isban.cl/CL/ACL/1MDCLVSP001/SolicitaDesafio">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx10="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP001.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/KT71.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:pfx5="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PRTF_VALIDA_CONTRATO_GENERAL.xsd" xmlns:pfx8="http://itg.isban.cl/CL/TC/1MDKT71/ComunaCuidadRegion" xmlns:pfx7="http://itg.isban.cl/CL/ACL/1MDCLVSP001/SolicitaDesafio" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="Confirma" path="Confirma">
+                                    <ns0:doc>FFMM - Confirma La Firma Del Contrato General De Fondos</ns0:doc>
+                                    <ns0:method id="getContratoLUFConfirma" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/ContratoLUF/CL1CO-MANConfirma.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns9="http://www.tibco.com/pe/EngineTypes" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fm_graba_cliente.xsd" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PRTF_REGISTRA_CONTRATO_GENERAL.xsd" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns8="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP002.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1MDCLVSP002/ValidaDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://itg.isban.cl/CL/AGF/1SPSQLS/RegistraContratoGralFFMMComoFirmado" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/GrabaDatosDeUnClienteNuevo" xmlns:pfx6="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns9="http://www.tibco.com/pe/EngineTypes" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://itg.isban.cl/BackEndProcess/Resources/Schemas/prhb_fm_graba_cliente.xsd" xmlns:ns7="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PRTF_REGISTRA_CONTRATO_GENERAL.xsd" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns8="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/Info.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/CLVSP002.xsd" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1MDCLVSP002/ValidaDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://itg.isban.cl/CL/AGF/1SPSQLS/RegistraContratoGralFFMMComoFirmado" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/GrabaDatosDeUnClienteNuevo" xmlns:pfx6="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                            </ns0:resource>
+                            <ns0:resource id="Documentos" path="Documentos">
+                                <ns0:doc>Consulta de documentos</ns0:doc>
+                                <ns0:resource id="ReglamentoFichaFondo" path="ReglamentoFichaFondo">
+                                    <ns0:doc>Consulta reglamento ficha fondo</ns0:doc>
+                                    <ns0:method id="getReglamentoFichaFondo" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/Documentos/CL1CO-CONDctoReglamentoFichaFondo.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://beans.altiuz.cl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://ws.altiuz.cl" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                <xsl:template xmlns:ns2="http://beans.altiuz.cl" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://ws.altiuz.cl" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="SolicitudAporte" path="SolicitudAporte">
+                                    <ns0:doc>Consulta Solicitud de Aporte</ns0:doc>
+                                    <ns0:method id="getSolicitudAporte" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/Documentos/CL1CO-CONDctoSolicitudAporteTransferencias.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                    <root>
+                                                        <request_msgJSon>
+                                                            <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                        </request_msgJSon>
+                                                        <documento>
+                                                            <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/Command"/>
+                                                        </documento>
+                                                    </root>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/pr_fm_consulta_contrato.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/ContratoImpreso" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://ws.builders.go2.com/">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/pr_fm_consulta_contrato.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/ContratoImpreso" xmlns:pfx6="http://ws.builders.go2.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="DctoContratoLUF" path="ContratoLUF">
+                                    <ns0:method id="getContratoLUF" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/Documentos/CL1CO-CONDctoContratoLUF.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/pr_fm_consulta_contrato.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/ContratoImpreso" xmlns:pfx6="http://ws.builders.go2.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/pr_fm_consulta_contrato.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/ContratoImpreso" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://ws.builders.go2.com/" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                    <ns0:doc>Contrato general de fondos</ns0:doc>
+                                </ns0:resource>
+                                <ns0:resource id="SolicitudRescate" path="SolicitudRescate">
+                                    <ns0:doc>Consulta PDF Solicitud Rescate</ns0:doc>
+                                    <ns0:method id="getSolicitudRescate" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/Documentos/CL1CO-CONDctoSolicitudRescate.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" match="/*">
+                                                    <request_msgJSon>
+                                                        <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                    </request_msgJSon>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://ws.altiuz.cl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://ws.builders.go2.com/">
+                                                <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx6="http://ws.builders.go2.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" match="/*">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                                <ns0:resource id="SolicitudTransferencia" path="SolicitudTransferencia">
+                                    <ns0:doc>Consulta Solicitud de Transferencia</ns0:doc>
+                                    <ns0:method id="getSolicitudTransferencia" name="POST">
+                                        <ns0:doc/>
+                                        <Binding process="/Process/Documentos/CL1CO-CONDctoSolicitudAporteTransferencias.process">
+                                            <RESTResponseHeader>
+                                                <xsd:element name="Headers">
+                                                    <xsd:complexType>
+                                                        <xsd:sequence>
+                                                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                                                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                                                        </xsd:sequence>
+                                                    </xsd:complexType>
+                                                </xsd:element>
+                                            </RESTResponseHeader>
+                                            <Input-Binding xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                <xsl:template xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                                                    <root>
+                                                        <request_msgJSon>
+                                                            <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/PostData"/>
+                                                        </request_msgJSon>
+                                                        <documento>
+                                                            <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/Command"/>
+                                                        </documento>
+                                                    </root>
+                                                </xsl:template>
+                                            </Input-Binding>
+                                            <Output-Binding xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:pfx12="http://itg.isban.cl/CL/BG/1MDK520/TEFaCtaAdminFondos" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:pfx10="http://itg.isban.cl/CL/ACL/1MDCLVSP002/ValidaDesafio" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/ContratoImpreso" xmlns:pfx6="http://ws.builders.go2.com/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/pr_fm_consulta_contrato.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                <xsl:template xmlns:ns="http://itg.isban.cl/AppInversiones/Resources/Schemas/INFO.xsd" xmlns:pfx12="http://itg.isban.cl/CL/BG/1MDK520/TEFaCtaAdminFondos" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx11="http://itg.isban.cl/CL/PE/1MDPE68/ConsultaPersonaFisica" xmlns:pfx10="http://itg.isban.cl/CL/ACL/1MDCLVSP002/ValidaDesafio" xmlns:pfx5="http://itg.isban.cl/CL/AGF/1SPSQLS/ConsultaContratoImpreso" xmlns:pfx4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://itg.isban.cl/CL/ACL/1WSSuperClave/ValidarDesafio" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:pfx9="http://itg.isban.cl/CL/AGF/1SPSQLS/ValidacionContratoGeneralDeFFMM" xmlns:pfx8="http://ws.altiuz.cl" xmlns:pfx7="http://itg.isban.cl/CL/AGF/1SPSQLS/ContratoImpreso" xmlns:pfx6="http://ws.builders.go2.com/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://xmlns.tibco.com/encodings/mime" xmlns:ns6="http://www.tibco.com/pe/EngineTypes" xmlns:pfx="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://itg.isban.cl/BackEndProcess/Resources/Schemas/pr_fm_consulta_contrato.xsd" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://itg.isban.cl/BackEndProcess/Resources/Schemas/PE68.xsd" xmlns:ns3="http://itg.isban.cl/BackEndProcess/Resources/Schemas/INFO.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                    <RESTResponse>
+                                                        <xsl:if test="$End/response_msgJSon">
+                                                            <asciiContent>
+                                                                <xsl:value-of select="$End/response_msgJSon"/>
+                                                            </asciiContent>
+                                                        </xsl:if>
+                                                        <Headers>
+                                                            <Content-Type>
+                                                                <xsl:value-of select="'application/json ; charset=utf-8'"/>
+                                                            </Content-Type>
+                                                        </Headers>
+                                                    </RESTResponse>
+                                                </xsl:template>
+                                            </Output-Binding>
+                                        </Binding>
+                                    </ns0:method>
+                                </ns0:resource>
+                            </ns0:resource>
+                        </ns0:resources>
+                    </ns0:application>
+                </InnerService>
+            </RestService>
+        </config>
+        <pd:inputBindings>
+            <ns0:ActivityInputClass xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/json">
+                <tmp>
+                    <xsl:value-of select="$HTTP-Receiver/ProcessStarterOutput/Method"/>
+                </tmp>
+            </ns0:ActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>REST Dispatch and Reply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>REST Dispatch and Reply</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
